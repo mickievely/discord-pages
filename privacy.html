@@ -1,33 +1,313 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head><meta charset="utf-8"><title>MyDiscordApp 개인정보 처리방침</title>
-<style>body{font-family:Arial,sans-serif;line-height:1.6;margin:20px}</style>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>서버 이용약관</title>
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+    }
+
+    body{
+        background:
+        radial-gradient(circle at top left,#2b2f77 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#4c1d95 0%,transparent 35%),
+        linear-gradient(135deg,#0f172a,#111827,#1e293b);
+        color:white;
+        min-height:100vh;
+        padding:40px 15px;
+    }
+
+    .container{
+        max-width:950px;
+        margin:auto;
+    }
+
+    .card{
+        background:rgba(255,255,255,0.06);
+        backdrop-filter:blur(12px);
+        border:1px solid rgba(255,255,255,0.12);
+        border-radius:28px;
+        padding:40px;
+        box-shadow:
+        0 10px 40px rgba(0,0,0,0.45),
+        inset 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    .title{
+        text-align:center;
+        margin-bottom:10px;
+        font-size:42px;
+        font-weight:800;
+        background:linear-gradient(90deg,#60a5fa,#c084fc,#f472b6);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+    }
+
+    .subtitle{
+        text-align:center;
+        color:#cbd5e1;
+        margin-bottom:35px;
+        font-size:16px;
+    }
+
+    .rule-list{
+        display:flex;
+        flex-direction:column;
+        gap:18px;
+    }
+
+    .rule{
+        background:rgba(255,255,255,0.05);
+        border:1px solid rgba(255,255,255,0.08);
+        border-radius:20px;
+        padding:20px;
+        transition:0.25s;
+    }
+
+    .rule:hover{
+        transform:translateY(-3px);
+        background:rgba(255,255,255,0.08);
+        border-color:rgba(255,255,255,0.18);
+    }
+
+    .rule-title{
+        font-size:20px;
+        font-weight:700;
+        margin-bottom:10px;
+        color:#ffffff;
+    }
+
+    .rule-desc{
+        color:#d1d5db;
+        line-height:1.7;
+        font-size:15px;
+    }
+
+    .danger{
+        color:#ff6b6b;
+        font-weight:700;
+    }
+
+    .warning{
+        color:#ffd166;
+        font-weight:700;
+    }
+
+    .money{
+        color:#4ade80;
+        font-weight:700;
+    }
+
+    .bottom-box{
+        margin-top:35px;
+        padding:25px;
+        border-radius:22px;
+        background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(168,85,247,0.2));
+        border:1px solid rgba(255,255,255,0.1);
+        text-align:center;
+    }
+
+    .bottom-box h2{
+        margin-bottom:12px;
+        font-size:24px;
+    }
+
+    .bottom-box p{
+        color:#e5e7eb;
+        line-height:1.8;
+    }
+
+    .footer{
+        text-align:center;
+        margin-top:30px;
+        color:#94a3b8;
+        font-size:14px;
+    }
+
+    @media(max-width:768px){
+
+        .card{
+            padding:25px;
+        }
+
+        .title{
+            font-size:30px;
+        }
+
+        .rule-title{
+            font-size:18px;
+        }
+    }
+</style>
 </head>
+
 <body>
-  <h1>MyDiscordApp — 개인정보 처리방침</h1>
-  <p>최종 업데이트: 2025-09-08</p>
 
-  <h2>1. 수집하는 정보</h2>
-  <p>서비스는 Discord API를 통해 사용자 ID, 사용자명, 역할 정보를 수집할 수 있습니다.</p>
+<div class="container">
 
-  <h2>2. 이용 목적</h2>
-  <ul>
-    <li>서버 내 역할 검증</li>
-    <li>사용자 인증</li>
-    <li>서비스 운영 기록 유지</li>
-  </ul>
+    <div class="card">
 
-  <h2>3. 보관 기간</h2>
-  <p>수집된 정보는 목적 달성 후 즉시 파기하거나 최소한의 기간만 보관합니다.</p>
+        <h1 class="title">📜 서버 이용약관</h1>
 
-  <h2>4. 제3자 제공</h2>
-  <p>법적 요구가 있는 경우를 제외하고 제3자에게 제공하지 않습니다.</p>
+        <p class="subtitle">
+            ⚠️ 본 서버 이용 시 아래 약관에 자동 동의한 것으로 간주됩니다.
+        </p>
 
-  <h2>5. 사용자 권리</h2>
-  <p>사용자는 자신의 개인정보에 대한 열람, 수정, 삭제를 요청할 수 있습니다.</p>
+        <div class="rule-list">
 
-  <footer style="margin-top:20px; font-size: 14px; color: gray;">
-    &copy; 2025 MyDiscordApp. 모든 권리 보유.
-  </footer>
+            <div class="rule">
+                <div class="rule-title">1️⃣ 버그·악용 행위 금지</div>
+                <div class="rule-desc"><span class="danger">🚫 즉시 추방 및 영구 차단</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">2️⃣ 관리자 모욕 금지</div>
+                <div class="rule-desc"><span class="danger">🚫 즉시 추방 및 영구 차단</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">3️⃣ 서버 모욕 금지</div>
+                <div class="rule-desc"><span class="danger">🚫 즉시 추방 및 영구 차단</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">4️⃣ 타 서버 홍보 금지</div>
+                <div class="rule-desc"><span class="danger">🚫 즉시 추방 및 영구 차단</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">5️⃣ 사기·사칭 금지</div>
+                <div class="rule-desc"><span class="danger">🚫 즉시 추방 및 영구 차단 및 거래 제한</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">6️⃣ 운영 방해 금지</div>
+                <div class="rule-desc"><span class="danger">🚫 즉시 추방 및 영구 차단</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">7️⃣ 티켓 응답 독촉 금지</div>
+                <div class="rule-desc"><span class="warning">⏳ 반복 독촉·도배·과도한 재촉 시 제재 가능</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">8️⃣ 이용 책임 본인 부담</div>
+                <div class="rule-desc">⚠️ 서버 이용 중 발생하는 문제 및 손해는 이용자 책임</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">9️⃣ 경고 누적 시 제재</div>
+                <div class="rule-desc"><span class="danger">🚫 추방 또는 영구 차단 가능</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">🔟 환불 불가 원칙</div>
+                <div class="rule-desc"><span class="money">💰 디지털 상품 특성상 구매 즉시 사용 여부와 관계없이 환불 불가</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">1️⃣1️⃣ 스크립트 관련 규칙</div>
+                <div class="rule-desc">📜 라이선스 등록만 안내하며 별도 설치·오류 지원은 제공하지 않을 수 있음</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">1️⃣2️⃣ 3자 방지·인증 규칙</div>
+                <div class="rule-desc">🛡️ 관리자 지시 불이행·우회 시 차단 및 필요 시 법적 조치 가능</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">1️⃣3️⃣ 서비스 중단·변경</div>
+                <div class="rule-desc">⚡ 운영·보안·기술적 사유로 서비스가 변경·중단될 수 있으며 이에 대한 보상·환불 불가</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">1️⃣4️⃣ 제재 권한</div>
+                <div class="rule-desc">👮 운영진은 서버 질서 유지를 위해 사전 고지 없이 제재 가능</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">1️⃣5️⃣ 약관 수정 권한</div>
+                <div class="rule-desc">✏️ 운영진 재량으로 약관 수정 가능하며 지속 이용 시 자동 동의로 간주</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">1️⃣6️⃣ 쿠키·재화 관련 규정</div>
+                <div class="rule-desc">🍪 쿠키/재화 지급 오류·불량·누락 발생 시 상황 확인 후 처리되며 단순 변심 및 일부 사용 이후 환불 불가</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">1️⃣7️⃣ 교환·출금 기준</div>
+                <div class="rule-desc"><span class="money">💰 서버 내 재화·쿠키 교환은 최소 1,000원 이상부터 가능</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">1️⃣8️⃣ 문의 응답 관련 안내</div>
+                <div class="rule-desc">⏳ 운영진은 개인 사정 및 업무로 인해 문의 응답이 지연될 수 있으며 즉각적인 답변을 보장하지 않음</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">1️⃣9️⃣ 거래 책임 안내</div>
+                <div class="rule-desc">🤝 개인 간 거래·외부 거래로 발생한 피해는 서버 및 운영진이 책임지지 않음</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">2️⃣0️⃣ 악의적 행동 금지</div>
+                <div class="rule-desc"><span class="danger">🚫 허위 신고·억지 환불 요구·협박·분쟁 유도 시 즉시 제재 가능</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">2️⃣1️⃣ 계정 및 보안 책임</div>
+                <div class="rule-desc">🔐 계정 관리 소홀·공유·해킹·도용으로 발생한 피해는 이용자 책임</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">2️⃣2️⃣ 서버 경제 시스템 규정</div>
+                <div class="rule-desc"><span class="danger">💰 아이템·코인·재화의 비정상 획득·복사·어뷰징 적발 시 영구 차단</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">2️⃣3️⃣ 운영 판단 우선 원칙</div>
+                <div class="rule-desc">⚖️ 규정에 명시되지 않은 사항도 운영진 판단에 따라 제재 가능</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">🔒 개인정보 보호</div>
+                <div class="rule-desc"><span class="danger">🛑 개인정보 요구·공유·유출 시 즉시 차단 및 제재</span></div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">📌 법적 분쟁 안내</div>
+                <div class="rule-desc">⚖️ 서버 운영 방해·사기·악성 행위 발생 시 관련 법률에 따라 대응 가능</div>
+            </div>
+
+            <div class="rule">
+                <div class="rule-title">📌 기타 규정</div>
+                <div class="rule-desc"><span class="danger">🚫 장사 방해, 분쟁 유도, 서버 분위기 저해 행위 등 운영진 판단상 문제 행위는 즉시 제재 가능</span></div>
+            </div>
+
+        </div>
+
+        <div class="bottom-box">
+            <h2>✅ 최종 동의 안내</h2>
+            <p>
+                본 서버를 이용하는 즉시 위 약관에 동의한 것으로 간주됩니다.<br>
+                규정 위반 시 운영진 판단에 따라 제한·차단·추방이 진행될 수 있습니다.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        © 2026 SERVER TERMS • ALL RIGHTS RESERVED
+    </div>
+
+</div>
+
 </body>
 </html>
