@@ -1,31 +1,572 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>MyDiscordApp - 연결된 역할 확인</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
-    code { background: #f4f4f4; padding: 2px 5px; border-radius: 4px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Volt, 키훅, Wave, Potassium, Synapse Z 사용법 안내">
+<title>사용법 안내</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0e14;
+  --bg-elevated: #12151f;
+  --surface: rgba(24, 28, 42, 0.72);
+  --surface-solid: #181c2a;
+  --surface-hover: rgba(36, 42, 62, 0.85);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --text: #eef1f8;
+  --muted: #9aa4ba;
+  --accent: #7c9cff;
+  --accent-2: #9d7dff;
+  --accent-glow: rgba(124, 156, 255, 0.35);
+  --accent-soft: rgba(124, 156, 255, 0.12);
+  --warn: #ffc14d;
+  --ok: #4ae8a8;
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 22px;
+  --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.35);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --font: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --pad-x: clamp(0.75rem, 3vw, 1.5rem);
+  --pad-y: clamp(1rem, 4vw, 2rem);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { height: 100%; margin: 0; }
+body {
+  font-family: var(--font);
+  font-size: clamp(0.9rem, 0.28vw + 0.86rem, 1rem);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(900px 480px at 12% -8%, rgba(124, 156, 255, 0.18), transparent 55%),
+    radial-gradient(700px 420px at 88% 8%, rgba(157, 125, 255, 0.12), transparent 50%),
+    radial-gradient(600px 360px at 50% 100%, rgba(74, 232, 168, 0.06), transparent 45%);
+  background-attachment: fixed;
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a {
+  color: #b8ccff;
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+  transition: color 0.2s ease, box-shadow 0.2s ease;
+}
+a:hover {
+  color: #dce6ff;
+  text-decoration: underline;
+}
+.shell {
+  min-height: 100dvh;
+  min-height: 100vh;
+  padding: var(--pad-y) var(--pad-x);
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  padding-left: max(var(--pad-x), env(safe-area-inset-left));
+  padding-right: max(var(--pad-x), env(safe-area-inset-right));
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 270px) minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2rem);
+  width: 100%;
+  max-width: min(1120px, 100%);
+  margin: 0 auto;
+  min-height: calc(100dvh - var(--pad-y) * 2);
+  min-height: calc(100vh - var(--pad-y) * 2);
+  align-items: start;
+}
+@media (max-width: 899px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+aside {
+  position: sticky;
+  top: max(0.75rem, env(safe-area-inset-top));
+  align-self: start;
+  padding: clamp(1rem, 3vw, 1.35rem);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(155deg, rgba(30, 34, 52, 0.92) 0%, rgba(18, 21, 32, 0.88) 100%);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-soft), var(--shadow-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+@media (max-width: 899px) {
+  aside {
+    position: relative;
+    top: auto;
+    padding: 1rem 1rem 0.85rem;
+  }
+}
+.brand {
+  font-size: clamp(1.05rem, 0.5vw + 1rem, 1.2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.25rem;
+  background: linear-gradient(120deg, #fff 0%, #c9d6ff 45%, #b8a8ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.brand-sub {
+  font-size: clamp(0.78rem, 0.2vw + 0.74rem, 0.875rem);
+  color: var(--muted);
+  margin: 0 0 1rem;
+  line-height: 1.55;
+}
+.nav-scroll {
+  margin: 0;
+}
+@media (max-width: 899px) {
+  .nav-scroll {
+    margin: 0 -0.35rem;
+    padding: 0 0.35rem 0.35rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+  }
+  .nav-scroll::-webkit-scrollbar { display: none; height: 0; width: 0; }
+}
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+@media (max-width: 899px) {
+  nav {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.45rem;
+    width: max-content;
+    min-width: 100%;
+    padding-bottom: 0.15rem;
+  }
+}
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.72rem 0.95rem;
+  min-height: 46px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(238, 241, 248, 0.92);
+  font: inherit;
+  font-size: clamp(0.88rem, 0.15vw + 0.85rem, 0.95rem);
+  font-weight: 500;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+@media (max-width: 899px) {
+  .nav-btn {
+    width: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 0.65rem 1.05rem;
+    border-radius: 999px;
+  }
+}
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.nav-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.nav-btn[aria-selected="true"] {
+  background: linear-gradient(135deg, rgba(124, 156, 255, 0.22) 0%, rgba(157, 125, 255, 0.12) 100%);
+  border-color: rgba(124, 156, 255, 0.35);
+  color: #fff;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-btn { transition: none; }
+}
+main {
+  padding: clamp(0.25rem, 1vw, 0.5rem) 0 clamp(2rem, 5vw, 3rem);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.page-head {
+  margin-bottom: clamp(1.25rem, 3vw, 1.75rem);
+}
+h1 {
+  font-size: clamp(1.45rem, 1.5vw + 1.1rem, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  margin: 0 0 0.5rem;
+  line-height: 1.22;
+  color: #fff;
+  text-shadow: 0 2px 28px rgba(124, 156, 255, 0.18);
+}
+.lead {
+  color: var(--muted);
+  font-size: clamp(0.9rem, 0.25vw + 0.86rem, 1.02rem);
+  margin: 0;
+  max-width: 58ch;
+  line-height: 1.65;
+}
+.panel {
+  display: none;
+}
+.panel.active {
+  display: block;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .panel.active {
+    animation: rise 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel.active { animation: none; }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: clamp(1rem, 2.5vw, 1.35rem) clamp(1rem, 2.8vw, 1.45rem);
+  margin-bottom: clamp(0.75rem, 2vw, 1rem);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.card h2 {
+  font-size: clamp(0.92rem, 0.2vw + 0.88rem, 1.05rem);
+  font-weight: 600;
+  margin: 0 0 0.85rem;
+  color: #d4daf0;
+  letter-spacing: -0.02em;
+}
+.steps, .bullets {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.steps li, .bullets li {
+  margin-bottom: 0.55rem;
+  padding-left: 0.15rem;
+}
+.steps li:last-child, .bullets li:last-child { margin-bottom: 0; }
+.note {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.callout {
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 193, 77, 0.22);
+  background: linear-gradient(135deg, rgba(255, 193, 77, 0.1) 0%, rgba(255, 140, 66, 0.05) 100%);
+  padding: clamp(0.9rem, 2vw, 1.1rem) clamp(1rem, 2.5vw, 1.2rem);
+  margin: clamp(0.75rem, 2vw, 1rem) 0;
+  font-size: clamp(0.88rem, 0.15vw + 0.85rem, 0.95rem);
+  line-height: 1.65;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.callout.ok {
+  border-color: rgba(74, 232, 168, 0.25);
+  background: linear-gradient(135deg, rgba(74, 232, 168, 0.12) 0%, rgba(74, 200, 255, 0.05) 100%);
+}
+.link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-strong);
+  font-size: clamp(0.82rem, 0.12vw + 0.8rem, 0.88rem);
+  font-weight: 500;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.pill:hover {
+  background: rgba(124, 156, 255, 0.15);
+  border-color: rgba(124, 156, 255, 0.35);
+}
+.pill a {
+  color: #fff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+}
+.pill a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+.pill a svg.icon {
+  width: 1.05em;
+  height: 1.05em;
+  opacity: 0.95;
+}
+hr.sep {
+  border: none;
+  height: 1px;
+  margin: clamp(1rem, 3vw, 1.5rem) 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+}
+strong { font-weight: 600; color: #fff; }
+.svg-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+svg.icon {
+  width: 1.125em;
+  height: 1.125em;
+  flex-shrink: 0;
+  display: block;
+  fill: currentColor;
+}
+.nav-btn .icon {
+  width: 1.08em;
+  height: 1.08em;
+  opacity: 0.88;
+}
+.nav-btn[aria-selected="true"] .icon {
+  opacity: 1;
+}
+a.hasicon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38em;
+  vertical-align: middle;
+}
+a.hasicon:hover { text-decoration: underline; }
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+.brand-row .brand {
+  margin: 0;
+}
+.brand-row .icon {
+  width: 1.35em;
+  height: 1.35em;
+  color: #a8b8e8;
+  flex-shrink: 0;
+}
+@media (min-width: 900px) and (max-width: 1100px) {
+  .layout { grid-template-columns: minmax(190px, 230px) minmax(0, 1fr); }
+}
+@media (max-width: 380px) {
+  .nav-btn { padding-left: 0.85rem; padding-right: 0.85rem; font-size: 0.84rem; }
+}
+</style>
 </head>
 <body>
-  <h1>MyDiscordApp — 연결된 역할 확인 페이지</h1>
-  <p>이 페이지는 Discord 애플리케이션의 <strong>Linked Role Verification URL</strong> 용으로 사용됩니다.</p>
+<svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+  <symbol id="i-guide" viewBox="0 0 24 24"><path fill="currentColor" d="M4 5h16v3H4V5zm0 8h16v3H4v-3zm0 8h10v3H4v-3z"/></symbol>
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></symbol>
+  <symbol id="i-youtube" viewBox="0 0 24 24"><path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.796 24 17.297 24 12c0-6.627-5.373-12-12-12z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path fill="currentColor" d="M14 3h7v7h-2V7.41l-7.29 7.3-1.42-1.42 7.3-7.29H14V3zM5 5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7h-2v7H5V5z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M11 21h-1l1-7H7.5c-.58 0-.57-.38-.38-.49 2.04-1.74 6.42-5.61 6.5-5.75.06-.14 0-.26-.22-.26H7V3h6.92c.33 0 .48.25.36.66L11 21z"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><path fill="currentColor" d="M17 8h-1V6a4 4 0 0 0-8 0v2H8a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3zm-3 11a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm2-11H9V6a3 3 0 0 1 6 0v2z"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M2 12c2.2-2.8 4.4-2.8 6.6 0s4.4 2.8 6.6 0 4.4-2.8 6.6 0 4.4 2.8 6.6 0"/></symbol>
+  <symbol id="i-beaker" viewBox="0 0 24 24"><path fill="currentColor" d="M8 3h8v2h-1.2L18 15a4 4 0 0 1-7.95.2L9.2 5H8V3zm2.1 2l1.5 9.2a2 2 0 0 0 3.9-.05L13.9 5h-3.8zM7 19h10v2H7v-2z"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path fill="currentColor" d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></symbol>
+</svg>
+<div class="shell">
+<div class="layout">
+  <aside>
+    <div class="brand-row">
+      <svg class="icon" aria-hidden="true"><use href="#i-guide"/></svg>
+      <div class="brand">사용법 안내</div>
+    </div>
+    <p class="brand-sub">원하는 항목을 눌러 내용을 확인하세요.</p>
+    <div class="nav-scroll">
+    <nav id="nav" role="tablist" aria-label="안내 카테고리">
+      <button type="button" class="nav-btn" role="tab" id="tab-volt" aria-selected="true" aria-controls="panel-volt" data-panel="volt"><svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg>Volt</button>
+      <button type="button" class="nav-btn" role="tab" id="tab-kiciahook" aria-selected="false" aria-controls="panel-kiciahook" data-panel="kiciahook"><svg class="icon" aria-hidden="true"><use href="#i-key"/></svg>키훅 (kiciahook)</button>
+      <button type="button" class="nav-btn" role="tab" id="tab-wave" aria-selected="false" aria-controls="panel-wave" data-panel="wave"><svg class="icon" aria-hidden="true"><use href="#i-wave"/></svg>Wave</button>
+      <button type="button" class="nav-btn" role="tab" id="tab-potassium" aria-selected="false" aria-controls="panel-potassium" data-panel="potassium"><svg class="icon" aria-hidden="true"><use href="#i-beaker"/></svg>Potassium</button>
+      <button type="button" class="nav-btn" role="tab" id="tab-synapsez" aria-selected="false" aria-controls="panel-synapsez" data-panel="synapsez"><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg>Synapse Z</button>
+    </nav>
+    </div>
+  </aside>
+  <main>
+    <section id="panel-volt" class="panel active" role="tabpanel" aria-labelledby="tab-volt">
+      <header class="page-head">
+      <h1>Volt 설치 및 사용</h1>
+      <p class="lead">영상 가이드를 따라 하면 한국어 안내로 빠르게 설정할 수 있습니다.</p>
+      </header>
+      <div class="card">
+        <h2>이렇게 하시면 됩니다</h2>
+        <ol class="steps">
+          <li>아래 <strong>유튜브 안내 영상</strong>을 열어 순서대로 따라 해 주세요.</li>
+          <li>한국어 지원이 되므로, 화면에 나오는 그대로 진행하시면 됩니다.</li>
+        </ol>
+        <p class="note">영상 링크는 공식 채널 또는 구매처에서 안내받은 주소를 사용해 주세요.</p>
+      </div>
+      <div class="callout">
+        <strong>문제가 생겼을 때</strong><br>
+        서버에서 티켓을 만들거나, Volt 디스코드에서 도움을 받을 수 있습니다.
+        <div class="link-row">
+          <span class="pill"><a href="https://discord.gg/voltbz" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-discord"/></svg>Volt 디스코드</a></span>
+        </div>
+      </div>
+    </section>
 
-  <h2>사용 방법</h2>
-  <ol>
-    <li>Discord 개발자 포털 → 애플리케이션 선택</li>
-    <li>OAuth2 → Linked Roles 메뉴에서 <strong>Verification URL</strong> 입력</li>
-    <li>이 페이지의 주소를 사용: <code>https://BGSIAutoFarm.github.io/discord-pages/index.html</code></li>
-    <li>Discord가 보낸 <code>?token=...</code> 파라미터는 서버에서 검증해야 합니다.</li>
-  </ol>
+    <section id="panel-kiciahook" class="panel" role="tabpanel" aria-labelledby="tab-kiciahook" hidden>
+      <header class="page-head">
+      <h1>키훅 (kiciahook) 사용법</h1>
+      <p class="lead">디스코드에서 키를 등록하고, 발급된 스크립트를 복사해 사용합니다.</p>
+      </header>
+      <div class="card">
+        <h2>순서</h2>
+        <ol class="steps">
+          <li><a class="hasicon" href="https://discord.gg/5rk4kxxHcr" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-discord"/></svg>kiciahook 디스코드 서버</a>에 접속합니다.</li>
+          <li>서버 안에서 <strong>script</strong> 관련 채널로 이동합니다.</li>
+          <li><strong>Redeem Key</strong>에 본인이 구매한 키를 입력합니다.</li>
+          <li><strong>Get Script</strong>를 눌러 키가 포함된 스크립트를 복사한 뒤 사용합니다.</li>
+        </ol>
+      </div>
+    </section>
 
-  <h2>테스트</h2>
-  <p>URL에 <code>?token=123abc</code> 처럼 붙여 확인할 수 있습니다.</p>
+    <section id="panel-wave" class="panel" role="tabpanel" aria-labelledby="tab-wave" hidden>
+      <header class="page-head">
+      <h1>Wave 설치 및 사용</h1>
+      <p class="lead">사전에 필요한 프로그램을 준비한 뒤, 설치 파일을 실행하고 라이선스를 등록합니다.</p>
+      </header>
+      <div class="card">
+        <h2>사전 준비</h2>
+        <ul class="bullets">
+          <li><strong>안티바이러스</strong> — 설치·실행이 막히면 일시적으로 끄거나, 기존 방화벽 앱에서 <strong>실시간 보호만</strong> 꺼 보세요. (환경에 따라 생략 가능)</li>
+          <li><strong>Windows Defender 제어 도구</strong> (참고) — <a class="hasicon" href="https://github.com/qtkite/defender-control/releases/tag/v1.5" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>Defender Control v1.5</a></li>
+          <li><strong>.NET SDK 10</strong> — <a class="hasicon" href="https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-10.0.102-windows-x64-installer" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-link"/></svg>Windows x64 설치 프로그램</a></li>
+          <li><strong>Visual C++ 재배포 패키지</strong> — <a class="hasicon" href="https://aka.ms/vc14/vc_redist.x64.exe" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-link"/></svg>VC++ x64</a></li>
+          <li><strong>Node.js</strong> — <a class="hasicon" href="https://nodejs.org/en/download/prebuilt-installer" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-link"/></svg>공식 프리빌트 설치 안내</a></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>설치</h2>
+        <ol class="steps">
+          <li>라이선스를 구매한 뒤 클라이언트를 받습니다 — <a class="hasicon" href="https://getwave.gg/" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-link"/></svg>getwave.gg</a></li>
+          <li><strong>Wave-Setup.exe</strong>를 실행합니다. (Bloxstrap이 함께 설치될 수 있습니다.)</li>
+          <li>Wave를 실행하고 <strong>회원가입</strong>을 완료합니다.</li>
+          <li>화면의 <strong>키 아이콘</strong>을 눌러 <strong>라이선스</strong>를 입력합니다.</li>
+        </ol>
+      </div>
+      <hr class="sep">
+      <div class="card">
+        <h2>실행 시 참고</h2>
+        <ul class="bullets">
+          <li><strong>Wave.exe</strong>를 실행한 뒤 안내에 따라 삽입합니다.</li>
+        </ul>
+        <div class="callout">
+          <strong>인젝션(삽입)은 Roblox 로비에서</strong> 진행해 주세요. 게임 안이 아닌 로비 상태에서 진행하는 것이 안전합니다.
+        </div>
+      </div>
+      <div class="callout ok">Wave로 스크립트 실행 준비가 끝나면, 이후 단계는 Wave 안내에 맞춰 진행하면 됩니다.</div>
+    </section>
 
-  <footer style="margin-top:20px; font-size: 14px; color: gray;">
-    &copy; 2025 MyDiscordApp. 모든 권리 보유.
-  </footer>
+    <section id="panel-potassium" class="panel" role="tabpanel" aria-labelledby="tab-potassium" hidden>
+      <header class="page-head">
+      <h1>Potassium 사용법</h1>
+      <p class="lead">공식 디스코드의 봇 명령으로만 받은 파일을 사용하세요.</p>
+      </header>
+      <div class="card">
+        <h2>순서</h2>
+        <ol class="steps">
+          <li>공식 디스코드에 들어갑니다 — <a class="hasicon" href="https://discord.gg/potassium" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-discord"/></svg>Potassium 디스코드</a></li>
+          <li>서버에서 <strong>psm</strong> 봇을 찾습니다.</li>
+          <li><strong>/register</strong> 명령으로 등록을 마칩니다.</li>
+          <li>등록이 끝나면 <strong>/download</strong>로 공식 클라이언트를 받습니다.</li>
+        </ol>
+      </div>
+      <div class="callout">
+        <strong>다운로드는 반드시 공식 디스코드에서만</strong> 진행하세요. 다른 경로의 파일은 사용하지 마세요.
+      </div>
+    </section>
+
+    <section id="panel-synapsez" class="panel" role="tabpanel" aria-labelledby="tab-synapsez" hidden>
+      <header class="page-head">
+      <h1>Synapse Z 사용법</h1>
+      <p class="lead">아래 유튜브 영상을 보면서 화면에 나오는 순서대로 따라 하시면 됩니다.</p>
+      </header>
+      <div class="card">
+        <h2>안내 영상</h2>
+        <p class="note">영상에서 안내하는 단계를 그대로 진행해 주세요. 잠시 멈추며 천천히 따라 하셔도 괜찮습니다.</p>
+        <div class="link-row">
+          <span class="pill"><a href="https://www.youtube.com/watch?v=tWjNwwj6Rkw" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-youtube"/></svg>YouTube에서 보기</a></span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</div>
+<script>
+(function () {
+  var nav = document.getElementById("nav");
+  var buttons = nav.querySelectorAll(".nav-btn");
+  var panels = {
+    volt: document.getElementById("panel-volt"),
+    kiciahook: document.getElementById("panel-kiciahook"),
+    wave: document.getElementById("panel-wave"),
+    potassium: document.getElementById("panel-potassium"),
+    synapsez: document.getElementById("panel-synapsez")
+  };
+  function show(key) {
+    Object.keys(panels).forEach(function (k) {
+      var p = panels[k];
+      var on = k === key;
+      p.classList.toggle("active", on);
+      p.hidden = !on;
+    });
+    buttons.forEach(function (btn) {
+      var sel = btn.getAttribute("data-panel") === key;
+      btn.setAttribute("aria-selected", sel ? "true" : "false");
+    });
+    try {
+      history.replaceState(null, "", "#" + key);
+    } catch (e) {}
+  }
+  nav.addEventListener("click", function (e) {
+    var t = e.target.closest(".nav-btn");
+    if (!t || !nav.contains(t)) return;
+    var key = t.getAttribute("data-panel");
+    if (key) show(key);
+  });
+  function fromHash() {
+    var h = (location.hash || "").replace(/^#/, "").toLowerCase();
+    if (panels[h]) return h;
+    return "volt";
+  }
+  show(fromHash());
+  window.addEventListener("hashchange", function () {
+    var k = fromHash();
+    show(k);
+  });
+})();
+</script>
 </body>
 </html>
