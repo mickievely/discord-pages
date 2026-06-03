@@ -5241,13 +5241,166 @@ spawn(function()
 		end;
 	end;
 end);
+local FastStatsGui, FastStatsLabel;
+local FastStartTime, FastStartLevel, FastStartBeli = 0, 0, 0;
+local FastMythicCount = 0;
+local function FastComma(n)
+	n = math.floor(tonumber(n) or 0);
+	local neg = n < 0;
+	local s = tostring(math.abs(n));
+	while true do
+		local cnt;
+		s, cnt = s:gsub("^(%d+)(%d%d%d)", "%1,%2");
+		if cnt == 0 then
+			break;
+		end;
+	end;
+	return (neg and "-" or "") .. s;
+end;
+pcall(function()
+	FastStatsGui = Instance.new("ScreenGui");
+	FastStatsGui.Name = "UGStats";
+	FastStatsGui.ResetOnSpawn = false;
+	FastStatsGui.IgnoreGuiInset = true;
+	FastStatsGui.DisplayOrder = 9999;
+	FastStatsGui.Enabled = false;
+	FastStatsGui.Parent = ((gethui and gethui()) or (game:GetService("CoreGui")));
+	local bg = Instance.new("TextButton");
+	bg.Size = UDim2.new(1, 0, 1, 0);
+	bg.BackgroundColor3 = Color3.fromRGB(0, 0, 0);
+	bg.BorderSizePixel = 0;
+	bg.AutoButtonColor = false;
+	bg.Text = "";
+	bg.Parent = FastStatsGui;
+	bg.MouseButton1Click:Connect(function()
+		FastStatsGui.Enabled = false;
+	end);
+	FastStatsLabel = Instance.new("TextLabel");
+	FastStatsLabel.Size = UDim2.new(1, -48, 1, -48);
+	FastStatsLabel.Position = UDim2.new(0, 24, 0, 24);
+	FastStatsLabel.BackgroundTransparency = 1;
+	FastStatsLabel.Font = UI_FONT;
+	FastStatsLabel.TextSize = 22;
+	FastStatsLabel.TextColor3 = Color3.fromRGB(235, 235, 235);
+	FastStatsLabel.TextStrokeTransparency = 0.4;
+	FastStatsLabel.TextXAlignment = Enum.TextXAlignment.Left;
+	FastStatsLabel.TextYAlignment = Enum.TextYAlignment.Top;
+	FastStatsLabel.RichText = true;
+	FastStatsLabel.ZIndex = 2;
+	FastStatsLabel.Text = "";
+	FastStatsLabel.Parent = FastStatsGui;
+end);
+local function FastStatsStart()
+	FastStartTime = tick();
+	FastMythicCount = 0;
+	local d = game.Players.LocalPlayer:FindFirstChild("Data");
+	FastStartLevel = ((d and d:FindFirstChild("Level") and d.Level.Value) or 0);
+	FastStartBeli = ((d and d:FindFirstChild("Beli") and d.Beli.Value) or 0);
+end;
 MainTab:Toggle(L.auto_farm_fast, _G.Settings.Main["Auto Farm Fast"], L.desc_farm_fast, function(value)
 	_G.Settings.Main["Auto Farm Fast"] = value;
 	if value then
 		_G.Settings.Main["Auto Farm"] = false;
+		FastStatsStart();
+		if FastStatsGui then
+			FastStatsGui.Enabled = true;
+		end;
+	else
+		if FastStatsGui then
+			FastStatsGui.Enabled = false;
+		end;
 	end;
 	StopTween(_G.Settings.Main["Auto Farm Fast"]);
 	(getgenv()).SaveSetting();
+end);
+spawn(function()
+	while wait(1) do
+		if _G.Settings.Main["Auto Farm Fast"] and FastStatsGui and FastStatsGui.Enabled and FastStatsLabel then
+			pcall(function()
+				local plr = game.Players.LocalPlayer;
+				local d = plr:FindFirstChild("Data");
+				local lvl = ((d and d:FindFirstChild("Level") and d.Level.Value) or 0);
+				local beli = ((d and d:FindFirstChild("Beli") and d.Beli.Value) or 0);
+				local el = tick() - FastStartTime;
+				local hh = math.floor(el / 3600);
+				local mm = math.floor(el % 3600 / 60);
+				local ss = math.floor(el % 60);
+				FastStatsLabel.Text = string.format("<b>유지폰 자동 사냥</b>\n\n유저  :  %s\n레벨  :  %d   ( +%d )\n플레이 시간  :  %d시간 %d분 %d초\n번 베리  :  %s\n신화 열매  :  %d\n\n<font color=\"rgb(140,140,140)\">화면을 한 번 탭하면 메뉴가 다시 나옵니다</font>", tostring(plr.DisplayName), lvl, lvl - FastStartLevel, hh, mm, ss, FastComma(beli - FastStartBeli), FastMythicCount);
+			end);
+		end;
+	end;
+end);
+local FastMythicFruits = {
+	"Gravity Fruit",
+	"Mammoth Fruit",
+	"T-Rex Fruit",
+	"Dough Fruit",
+	"Shadow Fruit",
+	"Venom Fruit",
+	"Control Fruit",
+	"Spirit Fruit",
+	"Dragon Fruit",
+	"Leopard Fruit",
+	"Kitsune Fruit",
+	"Yeti Fruit",
+	"Gas Fruit"
+};
+local function IsMythicFruitName(nm)
+	if not nm or type(nm) ~= "string" then
+		return false;
+	end;
+	for _, fn in ipairs(FastMythicFruits) do
+		local short = (fn:gsub(" Fruit", ""));
+		if nm == fn or nm == short or string.find(nm, short, 1, true) then
+			return true;
+		end;
+	end;
+	return false;
+end;
+local FastFruitBuyTick = 0;
+spawn(function()
+	while wait(2) do
+		if _G.Settings.Main["Auto Farm Fast"] then
+			pcall(function()
+				local plr = game.Players.LocalPlayer;
+				local bp = plr:FindFirstChild("Backpack");
+				if bp then
+					for _, v in pairs(bp:GetChildren()) do
+						if v.Name and string.find(v.Name, "Fruit") and IsMythicFruitName(v.Name) then
+							local first = ((v.Name):gsub(" Fruit", ""));
+							local ok = pcall(function()
+								(game:GetService("ReplicatedStorage")).Remotes.CommF_:InvokeServer("StoreFruit", first .. "-" .. first, v);
+							end);
+							if ok then
+								FastMythicCount = FastMythicCount + 1;
+							end;
+						end;
+					end;
+				end;
+				FastFruitBuyTick = FastFruitBuyTick + 1;
+				if FastFruitBuyTick >= 15 then
+					FastFruitBuyTick = 0;
+					local d = plr:FindFirstChild("Data");
+					local beli = ((d and d:FindFirstChild("Beli") and d.Beli.Value) or 0);
+					local okS, stock = pcall(function()
+						return (game:GetService("ReplicatedStorage")).Remotes.CommF_:InvokeServer("GetFruits");
+					end);
+					if okS and type(stock) == "table" then
+						for _, fr in pairs(stock) do
+							if type(fr) == "table" and fr.OnSale and IsMythicFruitName(fr.Name) then
+								local price = (tonumber(fr.Price) or math.huge);
+								if beli >= price then
+									pcall(function()
+										(game:GetService("ReplicatedStorage")).Remotes.CommF_:InvokeServer("PurchaseRawFruit", fr.Name, false);
+									end);
+								end;
+							end;
+						end;
+					end;
+				end;
+			end);
+		end;
+	end;
 end);
 local FastSwordCache = nil;
 function PickFarmSword()
