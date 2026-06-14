@@ -1,235 +1,145 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>xdayoungx Hub</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>점검중</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Pretendard',sans-serif;
-}
+    body {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111315;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: white;
+      overflow: hidden;
+    }
 
-body{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#09090b;
-    overflow:hidden;
-}
+    .container {
+      width: 90%;
+      max-width: 620px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 55px 40px;
+      border-radius: 24px;
+      background: #181a1d;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+    }
 
-body::before{
-    content:'';
-    position:absolute;
-    width:500px;
-    height:500px;
-    background:#22c55e;
-    filter:blur(180px);
-    opacity:.15;
-    top:-150px;
-    left:-100px;
-}
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: #202328;
+      color: rgba(255,255,255,0.75);
+      font-size: 13px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
 
-body::after{
-    content:'';
-    position:absolute;
-    width:500px;
-    height:500px;
-    background:#3b82f6;
-    filter:blur(180px);
-    opacity:.15;
-    bottom:-150px;
-    right:-100px;
-}
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ff5a5a;
+    }
 
-.card{
-    width:90%;
-    max-width:800px;
-    padding:45px;
-    border-radius:28px;
-    background:rgba(255,255,255,.04);
-    backdrop-filter:blur(20px);
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow:0 20px 60px rgba(0,0,0,.4);
-    position:relative;
-    z-index:2;
-}
+    h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 18px;
+      font-weight: 700;
+    }
 
-.status{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 16px;
-    border-radius:999px;
-    background:rgba(34,197,94,.12);
-    border:1px solid rgba(34,197,94,.25);
-    color:#7dffac;
-    font-size:13px;
-    margin-bottom:25px;
-}
+    p {
+      color: rgba(255,255,255,0.6);
+      font-size: 17px;
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
 
-.dot{
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:#22c55e;
-    box-shadow:0 0 12px #22c55e;
-}
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 30px;
+      border-radius: 16px;
+      text-decoration: none;
+      background: white;
+      color: #111315;
+      font-size: 15px;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
 
-h1{
-    font-size:42px;
-    font-weight:800;
-    margin-bottom:15px;
-    color:white;
-}
+    .btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
 
-.desc{
-    color:rgba(255,255,255,.65);
-    line-height:1.8;
-    margin-bottom:35px;
-}
+    .footer {
+      margin-top: 28px;
+      color: rgba(255,255,255,0.28);
+      font-size: 13px;
+      letter-spacing: 0.3px;
+    }
 
-.section-title{
-    color:white;
-    font-size:18px;
-    font-weight:700;
-    margin-bottom:15px;
-}
+    @media (max-width: 640px) {
+      .container {
+        padding: 45px 24px;
+      }
 
-.script-box{
-    background:#0f1115;
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:18px;
-    padding:18px;
-    margin-bottom:15px;
-}
-
-.script{
-    color:#9ef7b8;
-    font-family:Consolas,monospace;
-    font-size:13px;
-    word-break:break-all;
-    margin-bottom:15px;
-}
-
-.copy-btn{
-    width:100%;
-    border:none;
-    cursor:pointer;
-    border-radius:12px;
-    padding:14px;
-    font-weight:700;
-    color:white;
-    background:linear-gradient(135deg,#22c55e,#16a34a);
-    transition:.2s;
-}
-
-.copy-btn:hover{
-    transform:translateY(-2px);
-}
-
-.actions{
-    margin-top:30px;
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-}
-
-.discord{
-    flex:1;
-    min-width:200px;
-    text-decoration:none;
-    text-align:center;
-    padding:16px;
-    border-radius:14px;
-    color:white;
-    font-weight:700;
-    background:#5865F2;
-}
-
-.footer{
-    margin-top:25px;
-    text-align:center;
-    color:rgba(255,255,255,.3);
-    font-size:13px;
-}
-</style>
+      p {
+        font-size: 15px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="card">
+  <div class="container">
 
-    <div class="status">
-        <div class="dot"></div>
-        xdayoungx Hub Online
+    <div class="badge">
+      <div class="dot"></div>
+      서버 점검 진행중
     </div>
 
-    <h1>xdayoungx Hub</h1>
+    <h1>사이트가 현재 점검중입니다</h1>
 
-    <p class="desc">
-        최신 스크립트 및 업데이트 정보를 제공합니다.<br>
-        문제가 발생할 경우 디스코드를 통해 문의해주세요.
+    <p>
+      빠른 시일 내로 복구 예정입니다.<br>
+      자세한 문의는 디스코드를 이용해주세요.
     </p>
 
-    <div class="section-title">📋 Script Copy</div>
-
-    <div class="script-box">
-        <div class="script" id="script1">
-loadstring(game:HttpGet("https://api.ssgontop.shop/gag2"))()
-        </div>
-
-        <button class="copy-btn"
-        onclick="copyScript('script1',this)">
-        Script #1 복사
-        </button>
-    </div>
-
-    <div class="script-box">
-        <div class="script" id="script2">
-loadstring(game:HttpGet("https://api.ssgontop.shop/gag2steal"))()
-        </div>
-
-        <button class="copy-btn"
-        onclick="copyScript('script2',this)">
-        Script #2 복사
-        </button>
-    </div>
-
-    <div class="actions">
-        <a href="https://discord.gg/YzXea8ep"
-           target="_blank"
-           class="discord">
-           Discord Join
-        </a>
-    </div>
+    <a class="btn" href="https://discord.gg/YzXea8ep" target="_blank">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.01.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.404 8.404 0 0 0-.412-.833.052.052 0 0 0-.052-.025 13.14 13.14 0 0 0-3.257 1.01.041.041 0 0 0-.019.017C.533 5.927-.32 8.854.099 11.744a.05.05 0 0 0 .018.032 13.307 13.307 0 0 0 3.995 2.018.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.027-.07 8.623 8.623 0 0 1-1.248-.595.05.05 0 0 1-.005-.084c.084-.062.168-.129.248-.195a.05.05 0 0 1 .052-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.006c.08.067.164.134.248.196a.05.05 0 0 1-.004.084 8.282 8.282 0 0 1-1.249.594.05.05 0 0 0-.026.071c.24.465.514.908.817 1.328a.05.05 0 0 0 .056.02 13.254 13.254 0 0 0 4.001-2.019.05.05 0 0 0 .018-.031c.5-3.177-.838-6.079-2.354-8.821a.041.041 0 0 0-.019-.017ZM5.943 9.67c-.807 0-1.47-.738-1.47-1.644 0-.906.654-1.644 1.47-1.644.825 0 1.478.747 1.47 1.644 0 .906-.654 1.644-1.47 1.644Zm4.114 0c-.807 0-1.47-.738-1.47-1.644 0-.906.654-1.644 1.47-1.644.825 0 1.478.747 1.47 1.644 0 .906-.645 1.644-1.47 1.644Z"/>
+      </svg>
+      디스코드 문의
+    </a>
 
     <div class="footer">
-        © 2026 xdayoungx Hub
+      Temporary Maintenance
     </div>
 
-</div>
-
-<script>
-function copyScript(id, btn){
-    const text = document.getElementById(id).innerText;
-
-    navigator.clipboard.writeText(text).then(() => {
-        const old = btn.innerText;
-        btn.innerText = "✅ 복사 완료";
-
-        setTimeout(() => {
-            btn.innerText = old;
-        }, 2000);
-    });
-}
-</script>
+  </div>
 
 </body>
 </html>
