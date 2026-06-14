@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -7,18 +6,19 @@
 
 <title>xdayoungx Hub</title>
 
-<link rel="preconnect" href="https://cdnjs.cloudflare.com">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 <style>
 :root{
-    --bg:#0d1117;
-    --card:#161b22;
-    --border:#30363d;
-    --text:#f0f6fc;
-    --muted:#8b949e;
-    --green:#3fb950;
-    --green-hover:#2ea043;
+    --bg:#050505;
+    --card:#0f1115;
+    --card2:#151922;
+    --border:#262b36;
+    --text:#ffffff;
+    --muted:#9ca3af;
+    --green:#22c55e;
+    --green2:#16a34a;
+    --blue:#3b82f6;
 }
 
 *{
@@ -30,130 +30,158 @@
 
 body{
     min-height:100vh;
-    background:#0d1117;
+    background:
+    radial-gradient(circle at top,#111827 0%,#050505 45%),
+    #050505;
     color:var(--text);
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:20px;
+    padding:25px;
 }
 
 .container{
     width:100%;
-    max-width:760px;
+    max-width:850px;
 }
 
 .card{
-    background:var(--card);
+    background:rgba(15,17,21,.92);
+    backdrop-filter:blur(15px);
     border:1px solid var(--border);
-    border-radius:20px;
+    border-radius:28px;
     overflow:hidden;
-    box-shadow:0 25px 80px rgba(0,0,0,.45);
+    box-shadow:
+    0 0 40px rgba(34,197,94,.08),
+    0 30px 80px rgba(0,0,0,.65);
 }
 
 .header{
-    padding:35px;
-    border-bottom:1px solid var(--border);
+    padding:40px;
+    position:relative;
+}
+
+.header::after{
+    content:"";
+    position:absolute;
+    top:-120px;
+    right:-120px;
+    width:260px;
+    height:260px;
+    background:rgba(34,197,94,.08);
+    filter:blur(60px);
+    border-radius:50%;
 }
 
 .logo{
-    width:70px;
-    height:70px;
-    border-radius:16px;
-    background:#21262d;
-    border:1px solid var(--border);
+    width:78px;
+    height:78px;
+    border-radius:20px;
+    background:linear-gradient(135deg,#111827,#1f2937);
+    border:1px solid #2d3748;
     display:flex;
-    justify-content:center;
     align-items:center;
-    margin-bottom:18px;
+    justify-content:center;
+    margin-bottom:20px;
 }
 
 .logo i{
-    font-size:28px;
-    color:#58a6ff;
+    font-size:30px;
+    color:var(--green);
 }
 
 .title{
     display:flex;
     align-items:center;
     gap:12px;
-    font-size:32px;
-    font-weight:700;
-    margin-bottom:10px;
+    font-size:34px;
+    font-weight:800;
+    margin-bottom:12px;
 }
 
 .online-dot{
     width:12px;
     height:12px;
-    border-radius:50%;
     background:var(--green);
+    border-radius:50%;
     position:relative;
-    flex-shrink:0;
 }
 
 .online-dot::before{
     content:"";
     position:absolute;
-    inset:-6px;
+    inset:-7px;
     border-radius:50%;
-    background:var(--green);
+    background:rgba(34,197,94,.4);
     animation:pulse 2s infinite;
 }
 
 @keyframes pulse{
-    0%{
-        transform:scale(1);
-        opacity:.45;
-    }
-    70%{
-        transform:scale(2.2);
-        opacity:0;
-    }
-    100%{
-        opacity:0;
-    }
+    0%{transform:scale(1);opacity:.8;}
+    100%{transform:scale(2.5);opacity:0;}
 }
 
 .subtitle{
     color:var(--muted);
-    line-height:1.7;
+    line-height:1.8;
 }
 
 .content{
-    padding:28px;
+    padding:0 40px 40px;
 }
 
-.info{
+.badges{
     display:flex;
-    gap:10px;
     flex-wrap:wrap;
-    margin-bottom:20px;
+    gap:10px;
+    margin-bottom:25px;
 }
 
 .badge{
-    background:#21262d;
-    border:1px solid var(--border);
-    padding:8px 13px;
+    background:#111827;
+    border:1px solid #1f2937;
+    padding:10px 15px;
     border-radius:999px;
+    color:#d1d5db;
     font-size:13px;
-    color:#c9d1d9;
 }
 
 .badge i{
-    margin-right:5px;
+    margin-right:6px;
+    color:var(--green);
 }
 
-.code-box{
-    background:#0d1117;
+.script-card{
+    background:var(--card2);
     border:1px solid var(--border);
-    border-radius:14px;
-    padding:18px;
-    overflow-x:auto;
+    border-radius:18px;
+    padding:20px;
     margin-bottom:18px;
 }
 
+.script-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+.script-title i{
+    color:var(--green);
+}
+
+.code-box{
+    background:#090b10;
+    border:1px solid #20242d;
+    border-radius:14px;
+    padding:18px;
+    margin-bottom:15px;
+    overflow-x:auto;
+}
+
 .code-box code{
-    color:#79c0ff;
+    color:#7dd3fc;
     font-size:14px;
     word-break:break-all;
 }
@@ -161,30 +189,29 @@ body{
 .copy-btn{
     width:100%;
     border:none;
-    background:var(--green);
+    background:linear-gradient(135deg,var(--green),var(--green2));
     color:white;
-    padding:15px;
+    font-weight:700;
+    padding:14px;
     border-radius:14px;
-    font-size:15px;
-    font-weight:600;
     cursor:pointer;
     transition:.2s;
 }
 
 .copy-btn:hover{
-    background:var(--green-hover);
+    transform:translateY(-2px);
 }
 
-.copy-btn:active{
-    transform:scale(.99);
+.copy-btn i{
+    margin-right:8px;
 }
 
 .status{
     text-align:center;
-    margin-top:14px;
     color:var(--green);
+    margin-top:12px;
     opacity:0;
-    transition:.25s;
+    transition:.3s;
     font-size:14px;
 }
 
@@ -193,8 +220,8 @@ body{
 }
 
 .footer{
-    padding:18px 28px;
     border-top:1px solid var(--border);
+    padding:20px 40px;
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -202,17 +229,18 @@ body{
     font-size:13px;
 }
 
-.footer-left{
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-.footer-left i{
+.footer i{
     color:var(--green);
 }
 
 @media(max-width:700px){
+
+    .header,
+    .content,
+    .footer{
+        padding-left:20px;
+        padding-right:20px;
+    }
 
     .title{
         font-size:26px;
@@ -223,14 +251,6 @@ body{
         gap:10px;
         text-align:center;
     }
-
-    .header{
-        padding:25px;
-    }
-
-    .content{
-        padding:20px;
-    }
 }
 </style>
 </head>
@@ -238,117 +258,117 @@ body{
 
 <div class="container">
 
-    <div class="card">
+<div class="card">
 
-        <div class="header">
+<div class="header">
 
-            <div class="logo">
-                <i class="fa-solid fa-code"></i>
-            </div>
+<div class="logo">
+<i class="fa-solid fa-terminal"></i>
+</div>
 
-            <div class="title">
-                xdayoungx Hub
-                <span class="online-dot"></span>
-            </div>
+<div class="title">
+xdayoungx Hub
+<span class="online-dot"></span>
+</div>
 
-            <div class="subtitle">
-                Grow a Garden 2 스크립트를 사용하려면 아래 버튼을 눌러 복사하세요.
-                <br>
-                현재 서비스가 정상적으로 운영되고 있습니다.
-            </div>
+<div class="subtitle">
+Grow a Garden 2 최신 스크립트 제공<br>
+현재 모든 서비스가 정상적으로 운영되고 있습니다.
+</div>
 
-        </div>
+</div>
 
-        <div class="content">
+<div class="content">
 
-            <div class="info">
+<div class="badges">
+<div class="badge"><i class="fa-solid fa-bolt"></i> Latest Build</div>
+<div class="badge"><i class="fa-solid fa-shield-halved"></i> Stable</div>
+<div class="badge"><i class="fa-solid fa-server"></i> Online</div>
+</div>
 
-                <div class="badge">
-                    <i class="fa-solid fa-bolt"></i>
-                    최신 버전
-                </div>
+<div class="script-card">
 
-                <div class="badge">
-                    <i class="fa-solid fa-check"></i>
-                    정상 작동
-                </div>
+<div class="script-title">
+<i class="fa-solid fa-code"></i>
+메인 스크립트
+</div>
 
-                <div class="badge">
-                    <i class="fa-solid fa-server"></i>
-                    온라인
-                </div>
+<div class="code-box">
+<code id="script1">loadstring(game:HttpGet("https://api.ssgontop.shop/gag2"))()</code>
+</div>
 
-            </div>
+<button class="copy-btn" onclick="copyScript('script1','status1',this)">
+<i class="fa-regular fa-copy"></i>
+스크립트 복사
+</button>
 
-            <div class="code-box">
-<code>loadstring(game:HttpGet("https://api.ssgontop.shop/gag2steal"))()</code>
-            </div>
+<div class="status" id="status1">복사 완료</div>
 
-            <button class="copy-btn" id="copyBtn">
-                <i class="fa-regular fa-copy"></i>
-                스크립트 복사
-            </button>
+</div>
 
-            <div class="status" id="status">
-                스크립트가 복사되었습니다.
-            </div>
+<div class="script-card">
 
-        </div>
+<div class="script-title">
+<i class="fa-solid fa-robot"></i>
+자동 훔치기 스크립트
+</div>
 
-        <div class="footer">
+<div class="code-box">
+<code id="script2">loadstring(game:HttpGet("https://api.ssgontop.shop/gag2steal"))()</code>
+</div>
 
-            <div class="footer-left">
-                <i class="fa-solid fa-circle"></i>
-                xdayoungx Hub 서비스 정상 운영 중
-            </div>
+<button class="copy-btn" onclick="copyScript('script2','status2',this)">
+<i class="fa-regular fa-copy"></i>
+스크립트 복사
+</button>
 
-            <div>
-                최근 업데이트 적용됨
-            </div>
+<div class="status" id="status2">복사 완료</div>
 
-        </div>
+</div>
 
-    </div>
+</div>
+
+<div class="footer">
+<div>
+<i class="fa-solid fa-circle"></i>
+서비스 정상 운영중
+</div>
+
+<div>
+Build 2026.06
+</div>
+</div>
+
+</div>
 
 </div>
 
 <script>
-const script =
-'loadstring(game:HttpGet("https://api.ssgontop.shop/gag2steal"))()';
 
-const copyBtn = document.getElementById("copyBtn");
-const status = document.getElementById("status");
+async function copyScript(scriptId,statusId,button){
 
-copyBtn.addEventListener("click", async () => {
+    const text=document.getElementById(scriptId).innerText;
+    const status=document.getElementById(statusId);
 
     try{
 
-        await navigator.clipboard.writeText(script);
+        await navigator.clipboard.writeText(text);
 
-        status.textContent = "✓ 스크립트가 복사되었습니다.";
+        button.innerHTML='<i class="fa-solid fa-check"></i> 복사 완료';
         status.classList.add("show");
 
-        copyBtn.innerHTML =
-        '<i class="fa-solid fa-check"></i> 복사 완료';
-
-        setTimeout(() => {
-
+        setTimeout(()=>{
+            button.innerHTML='<i class="fa-regular fa-copy"></i> 스크립트 복사';
             status.classList.remove("show");
-
-            copyBtn.innerHTML =
-            '<i class="fa-regular fa-copy"></i> 스크립트 복사';
-
-        }, 2500);
+        },2500);
 
     }catch{
 
-        status.textContent =
-        "클립보드 접근 권한이 필요합니다.";
+        alert("클립보드 권한이 필요합니다.");
 
-        status.classList.add("show");
     }
+}
 
-});
 </script>
 
 </body>
