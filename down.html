@@ -1,145 +1,577 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>점검중</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#050508" />
+<meta name="color-scheme" content="dark" />
+<title>서버 점검중</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css" rel="stylesheet" />
+<style>
+    :root {
+        --bg: #050508;
+        --surface: rgba(14, 14, 18, 0.72);
+        --surface-2: rgba(22, 22, 28, 0.9);
+        --border: rgba(255, 255, 255, 0.07);
+        --border-strong: rgba(255, 255, 255, 0.13);
+        --text: #f4f4f6;
+        --muted: rgba(255, 255, 255, 0.5);
+        --muted-2: rgba(255, 255, 255, 0.32);
+        --accent: #5865f2;
+        --accent-hover: #6f7bf7;
+        --accent-glow: rgba(88, 101, 242, 0.35);
+        --white-glow: rgba(255, 255, 255, 0.05);
+        --radius: 24px;
+        --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *, *::before, *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        height: 100%;
     }
 
     body {
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #111315;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      color: white;
-      overflow: hidden;
+        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        padding: max(20px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+                 max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
     }
 
-    .container {
-      width: 90%;
-      max-width: 620px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 55px 40px;
-      border-radius: 24px;
-      background: #181a1d;
-      border: 1px solid rgba(255,255,255,0.06);
-      box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+    /* ── Background ── */
+    .scene {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
     }
 
+    .scene__gradient {
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse 90% 60% at 50% -10%, rgba(88, 101, 242, 0.12), transparent 55%),
+            radial-gradient(ellipse 50% 40% at 100% 100%, rgba(255, 255, 255, 0.03), transparent 50%),
+            radial-gradient(ellipse 40% 35% at 0% 80%, rgba(88, 101, 242, 0.06), transparent 50%);
+    }
+
+    .scene__grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, black 15%, transparent 78%);
+    }
+
+    .scene__noise {
+        position: absolute;
+        inset: 0;
+        opacity: 0.28;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+        mix-blend-mode: overlay;
+    }
+
+    .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(72px);
+        will-change: transform;
+    }
+
+    .orb--1 {
+        width: min(480px, 90vw);
+        height: min(480px, 90vw);
+        top: -18%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: radial-gradient(circle, rgba(88, 101, 242, 0.14) 0%, transparent 68%);
+        animation: drift-a 14s ease-in-out infinite alternate;
+    }
+
+    .orb--2 {
+        width: min(340px, 70vw);
+        height: min(340px, 70vw);
+        bottom: -12%;
+        right: -8%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+        animation: drift-b 11s ease-in-out infinite alternate;
+        animation-delay: -3s;
+    }
+
+    @keyframes drift-a {
+        from { transform: translateX(-50%) translateY(0) scale(1); }
+        to   { transform: translateX(-50%) translateY(20px) scale(1.05); }
+    }
+
+    @keyframes drift-b {
+        from { transform: translateY(0) scale(1); }
+        to   { transform: translateY(-16px) scale(1.04); }
+    }
+
+    /* ── Layout ── */
+    .wrap {
+        position: relative;
+        z-index: 1;
+        width: min(92vw, 500px);
+        animation: rise 0.85s var(--ease) both;
+    }
+
+    @keyframes rise {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Card ── */
+    .card {
+        position: relative;
+        padding: clamp(36px, 8vw, 48px) clamp(24px, 6vw, 40px) clamp(32px, 7vw, 40px);
+        border-radius: var(--radius);
+        background: var(--surface);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid var(--border);
+        box-shadow:
+            0 0 0 1px rgba(0, 0, 0, 0.6) inset,
+            0 1px 0 var(--border-strong) inset,
+            0 32px 80px rgba(0, 0, 0, 0.55),
+            0 0 60px rgba(88, 101, 242, 0.04);
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .card__shine {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 65%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    }
+
+    .card__glow {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 85% 45% at 50% -15%, var(--white-glow), transparent 62%);
+        pointer-events: none;
+    }
+
+    .card__inner {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ── Badge ── */
     .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 10px 18px;
-      border-radius: 999px;
-      background: #202328;
-      color: rgba(255,255,255,0.75);
-      font-size: 13px;
-      margin-bottom: 30px;
-      border: 1px solid rgba(255,255,255,0.05);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: clamp(24px, 5vw, 32px);
+        padding: 7px 14px 7px 12px;
+        border-radius: 100px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid var(--border);
     }
 
-    .dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #ff5a5a;
+    .badge__dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 14px var(--accent-glow);
+        animation: pulse-dot 2.4s ease-in-out infinite;
     }
 
+    @keyframes pulse-dot {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50%      { opacity: 0.45; transform: scale(0.82); }
+    }
+
+    /* ── Icon ── */
+    .icon-wrap {
+        position: relative;
+        width: clamp(64px, 16vw, 76px);
+        height: clamp(64px, 16vw, 76px);
+        margin: 0 auto clamp(22px, 5vw, 28px);
+        display: grid;
+        place-items: center;
+        border-radius: 20px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 36px rgba(0, 0, 0, 0.45);
+    }
+
+    .icon-wrap::before {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        border-radius: 21px;
+        padding: 1px;
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.18), transparent 45%, rgba(88, 101, 242, 0.12));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+
+    .icon-wrap svg {
+        width: 30px;
+        height: 30px;
+        color: var(--text);
+        animation: spin-slow 10s linear infinite;
+    }
+
+    @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+    }
+
+    /* ── Typography ── */
     h1 {
-      font-size: clamp(28px, 4vw, 42px);
-      line-height: 1.15;
-      letter-spacing: -1px;
-      margin-bottom: 18px;
-      font-weight: 700;
+        font-size: clamp(24px, 5.5vw, 34px);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        line-height: 1.22;
+        margin-bottom: 12px;
+        background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
-    p {
-      color: rgba(255,255,255,0.6);
-      font-size: 17px;
-      line-height: 1.8;
-      margin-bottom: 36px;
+    .desc {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-width: 360px;
+        margin: 0 auto;
+        word-break: keep-all;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px 30px;
-      border-radius: 16px;
-      text-decoration: none;
-      background: white;
-      color: #111315;
-      font-size: 15px;
-      font-weight: 600;
-      transition: 0.2s ease;
+    .desc__lead {
+        font-size: clamp(15px, 3.8vw, 16px);
+        line-height: 1.85;
+        color: rgba(255, 255, 255, 0.72);
+        font-weight: 500;
+        letter-spacing: -0.01em;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-      opacity: 0.9;
+    .desc__sub {
+        font-size: clamp(14px, 3.5vw, 15px);
+        line-height: 1.7;
+        color: var(--muted);
+        font-weight: 400;
+        padding-top: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    .footer {
-      margin-top: 28px;
-      color: rgba(255,255,255,0.28);
-      font-size: 13px;
-      letter-spacing: 0.3px;
+    /* ── Progress ── */
+    .progress {
+        margin-top: clamp(28px, 6vw, 36px);
+        height: 3px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.05);
+        overflow: hidden;
     }
 
-    @media (max-width: 640px) {
-      .container {
-        padding: 45px 24px;
-      }
+    .progress__bar {
+        height: 100%;
+        width: 42%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, transparent, rgba(88, 101, 242, 0.7), rgba(255, 255, 255, 0.45), transparent);
+        animation: shimmer 2.4s ease-in-out infinite;
+    }
 
-      p {
+    @keyframes shimmer {
+        0%   { transform: translateX(-130%); }
+        100% { transform: translateX(310%); }
+    }
+
+    /* ── Status ── */
+    .status {
+        margin-top: 22px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.52);
+        letter-spacing: 0.02em;
+    }
+
+    .status__dots {
+        display: flex;
+        gap: 4px;
+    }
+
+    .status__dots span {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.35);
+        animation: bounce 1.4s ease-in-out infinite;
+    }
+
+    .status__dots span:nth-child(2) { animation-delay: 0.15s; }
+    .status__dots span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes bounce {
+        0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
+        40%           { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* ── Discord CTA ── */
+    .actions {
+        margin-top: clamp(28px, 6vw, 36px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .discord-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+        max-width: 320px;
+        padding: 15px 24px;
+        border-radius: 14px;
         font-size: 15px;
-      }
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        color: #fff;
+        text-decoration: none;
+        background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.15) inset,
+            0 8px 28px rgba(88, 101, 242, 0.35),
+            0 2px 8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), background 0.2s ease;
+        -webkit-tap-highlight-color: transparent;
     }
-  </style>
+
+    .discord-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .discord-btn:hover {
+        background: linear-gradient(135deg, var(--accent-hover) 0%, #5865f2 100%);
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.18) inset,
+            0 12px 36px rgba(88, 101, 242, 0.45),
+            0 4px 12px rgba(0, 0, 0, 0.35);
+        transform: translateY(-2px);
+    }
+
+    .discord-btn:active {
+        transform: translateY(0) scale(0.98);
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.1) inset,
+            0 4px 16px rgba(88, 101, 242, 0.3);
+    }
+
+    .discord-btn__icon {
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        padding: 4px;
+    }
+
+    .discord-btn__icon svg {
+        width: 16px;
+        height: 16px;
+        fill: #fff;
+        display: block;
+    }
+
+    .discord-btn__label {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1px;
+        text-align: left;
+    }
+
+    .discord-btn__title {
+        font-size: 15px;
+        line-height: 1.2;
+    }
+
+    .discord-btn__sub {
+        font-size: 11px;
+        font-weight: 500;
+        opacity: 0.75;
+        letter-spacing: 0.01em;
+    }
+
+    .discord-btn__arrow {
+        margin-left: auto;
+        opacity: 0.6;
+        transition: transform 0.2s var(--ease), opacity 0.2s ease;
+    }
+
+    .discord-btn:hover .discord-btn__arrow {
+        transform: translateX(3px);
+        opacity: 1;
+    }
+
+    .actions__hint {
+        font-size: 12px;
+        color: var(--muted-2);
+        letter-spacing: 0.02em;
+    }
+
+    /* ── Footer ── */
+    .footer-line {
+        margin-top: clamp(24px, 5vw, 32px);
+        padding-top: clamp(20px, 4vw, 24px);
+        border-top: 1px solid var(--border);
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.24);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    /* ── Accessibility & performance ── */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+        .wrap { animation: none; }
+    }
+
+    @media (max-width: 380px) {
+        .discord-btn {
+            padding: 14px 18px;
+            gap: 10px;
+        }
+        .discord-btn__sub { display: none; }
+    }
+
+    @media (hover: none) {
+        .discord-btn:hover {
+            transform: none;
+            background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+            box-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.15) inset,
+                0 8px 28px rgba(88, 101, 242, 0.35);
+        }
+    }
+</style>
 </head>
 <body>
 
-  <div class="container">
+<div class="scene" aria-hidden="true">
+    <div class="scene__gradient"></div>
+    <div class="scene__grid"></div>
+    <div class="scene__noise"></div>
+    <div class="orb orb--1"></div>
+    <div class="orb orb--2"></div>
+</div>
 
-    <div class="badge">
-      <div class="dot"></div>
-      서버 점검 진행중
-    </div>
+<main class="wrap">
+    <article class="card">
+        <div class="card__shine" aria-hidden="true"></div>
+        <div class="card__glow" aria-hidden="true"></div>
 
-    <h1>사이트가 현재 점검중입니다</h1>
+        <div class="card__inner">
+            <div class="badge">
+                <span class="badge__dot" aria-hidden="true"></span>
+                Maintenance
+            </div>
 
-    <p>
-      빠른 시일 내로 복구 예정입니다.<br>
-      자세한 문의는 디스코드를 이용해주세요.
-    </p>
+            <div class="icon-wrap" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+            </div>
 
-    <a class="btn" href="https://discord.gg/YzXea8ep" target="_blank">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.01.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.404 8.404 0 0 0-.412-.833.052.052 0 0 0-.052-.025 13.14 13.14 0 0 0-3.257 1.01.041.041 0 0 0-.019.017C.533 5.927-.32 8.854.099 11.744a.05.05 0 0 0 .018.032 13.307 13.307 0 0 0 3.995 2.018.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.027-.07 8.623 8.623 0 0 1-1.248-.595.05.05 0 0 1-.005-.084c.084-.062.168-.129.248-.195a.05.05 0 0 1 .052-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.006c.08.067.164.134.248.196a.05.05 0 0 1-.004.084 8.282 8.282 0 0 1-1.249.594.05.05 0 0 0-.026.071c.24.465.514.908.817 1.328a.05.05 0 0 0 .056.02 13.254 13.254 0 0 0 4.001-2.019.05.05 0 0 0 .018-.031c.5-3.177-.838-6.079-2.354-8.821a.041.041 0 0 0-.019-.017ZM5.943 9.67c-.807 0-1.47-.738-1.47-1.644 0-.906.654-1.644 1.47-1.644.825 0 1.478.747 1.47 1.644 0 .906-.654 1.644-1.47 1.644Zm4.114 0c-.807 0-1.47-.738-1.47-1.644 0-.906.654-1.644 1.47-1.644.825 0 1.478.747 1.47 1.644 0 .906-.645 1.644-1.47 1.644Z"/>
-      </svg>
-      디스코드 문의
-    </a>
+            <h1>서버 점검중입니다</h1>
 
-    <div class="footer">
-      Temporary Maintenance
-    </div>
+            <div class="desc">
+                <p class="desc__lead">
+                    보다 안정적인 서비스를 위해<br>
+                    시스템 점검 및 최적화를 진행하고 있습니다.
+                </p>
+                <p class="desc__sub">잠시 후 다시 접속해 주세요.</p>
+            </div>
 
-  </div>
+            <div class="progress" role="progressbar" aria-label="점검 진행중" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress__bar"></div>
+            </div>
 
+            <div class="status">
+                <span class="status__dots" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                </span>
+                점검 진행중
+            </div>
+
+            <div class="actions">
+                <a
+                    class="discord-btn"
+                    href="https://discord.gg/mbdwnRSzKr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Discord 커뮤니티 참여 — 새 창에서 열림"
+                >
+                    <span class="discord-btn__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                    </span>
+                    <span class="discord-btn__label">
+                        <span class="discord-btn__title">Discord 커뮤니티</span>
+                        <span class="discord-btn__sub">실시간 공지 · 문의</span>
+                    </span>
+                    <svg class="discord-btn__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <p class="actions__hint">점검 소식은 Discord에서 가장 빠르게 확인할 수 있습니다</p>
+            </div>
+
+            <p class="footer-line">XDAYOUNGX · System Update</p>
+        </div>
+    </article>
+</main>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"d86f5aef537c44c7a6fe681fd5ebfde8","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
